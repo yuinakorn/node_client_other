@@ -4,8 +4,8 @@ require('dotenv').config();
 const secretKey = process.env.SECRET_KEY; 
 
 // Middleware to create JWT token
-function createToken(user) {
-  return jwt.sign({ email: user.email }, secretKey, {
+function createToken(user, auth_user) {
+  return jwt.sign({ sub: user.username, cid: auth_user.userCid, hcode: auth_user.userHoscode }, secretKey, {
     expiresIn: '1h' // Token expires in 1 hour
   });
 }
