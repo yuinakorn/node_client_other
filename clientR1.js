@@ -2,7 +2,7 @@ require('dotenv').config();
 const socket = require("socket.io-client")(process.env.SERVER_URL);
 const express = require("express");
 const { createToken, verifyToken } = require("./jwtMiddleware");
-const port = 3000;
+const port = process.env.PORT;
 
 const app = express();
 
