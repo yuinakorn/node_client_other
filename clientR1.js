@@ -1,7 +1,10 @@
 require("dotenv").config();
 const socket = require("socket.io-client")(process.env.SERVER_URL);
 const express = require("express");
+const jwt = require('jsonwebtoken');
 const { createToken, verifyToken } = require("./jwtMiddleware");
+const { getLogs } = require("./logs");
+
 const port = process.env.PORT;
 
 const app = express();
@@ -44,6 +47,31 @@ app.post("/api/:cid", verifyToken, (req, res) => {
     '","viewer_id": "' +
     socket.id +
     '","client_id":"","his_data":""}}';
+
+    const token = req.headers.authorization;
+    const secretKey = process.env.SECRET_KEY;
+
+    try {
+      // Decode the token
+      const decodedToken = jwt.verify(token, secretKey);
+      console.log(decodedToken);
+    
+      // You can access specific properties from the payload
+      const t_user = decodedToken.sub;
+      const t_cid = decodedToken.cid;
+      const t_hcode = decodedToken.hcode;
+    
+      // Use the decoded data in your application logic
+      // send to save log in database
+
+      let log = getLogs(t_user,t_cid,t_hcode,patientCid);
+      console.log(log);
+      
+
+    } catch (error) {
+      // If the token is invalid or expired, an error will be thrown
+      console.error('Invalid token:', error.message);
+    }
 
   // Set a flag to track whether the response has been sent
   let responseSent = false;
