@@ -13,7 +13,7 @@ const users = [
   ];
 
 app.get("/", (req, res) => {
-  res.send("Hi!");
+  res.send({"message": "Hi, How are you feeling today?", "status": "OK"});
 });
 
 app.post("/api/login", (req, res) => {
